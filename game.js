@@ -149,12 +149,16 @@ function update ()
     }
 }
 
+var scor = new Audio()
+scor.src = "sounds/score.mp3"
+
 function collectStar (player, star)
 {
     star.disableBody(true, true);
 
     //  Add and update the score
     score += 10;
+    scor.play();
     scoreText.setText('Score: ' + score);
 
     if (stars.countActive(true) === 0)
