@@ -1,8 +1,8 @@
 class Player{
     constructor(name){
-        this.name=name
-        Player.all.push(this)
+        this.name=name;
+        Player.all.push(this);
     }
 }
 
-Player.all=[]
+Player.all=[];

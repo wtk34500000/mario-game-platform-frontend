@@ -25,12 +25,7 @@ var score = 0;
 var gameOver = false;
 var scoreText;
 
-
-
-
 var game = new Phaser.Game(config)
-
-
 
 function preload ()
 {
@@ -45,6 +40,7 @@ function create ()
 {
     //  A simple background for our game
     this.add.image(400, 300, 'sky').setScale(1.5);
+    
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
@@ -62,7 +58,7 @@ function create ()
     player = this.physics.add.sprite(100, 450, 'dude');
 
     //  Player physics properties. Give the little guy a slight bounce.
-    player.setBounce(0.2);
+    player.setBounce(0.1);
     player.setCollideWorldBounds(true);
 
     //  Our player animations, turning, walking left and walking right.
@@ -196,20 +192,19 @@ function collectStar (player, star)
     }
 }
 
-
 function hitBomb (player, bomb)
 {
     this.physics.pause();
     const name=prompt('Name: ')
     Adaptor.postPlayer(name).then(player => {
-         new Player(player.name);
+        //  new Player(player.name);
         Adaptor.postGame(player, score).then(game => {
             Adaptor.getAllGames().then(games =>{
                 games.forEach((game)=>{
                    new Game(game)
                 })
                 const sortedArray=Game.all.sort((a, b) => b.score - a.score).slice(0, 10)
-
+                
                 scoreBoard(sortedArray)
             })
         })
@@ -223,23 +218,14 @@ function hitBomb (player, bomb)
     gameOver = true;
 }
 
-
 function scoreBoard(games){
         const table = document.querySelector('.score-board')
         games.forEach(game => {
-                console.log(Player.all)
-                Player.all.forEach(player =>{
-                    if(player.id === game.player_id){
-                        console.log("i am here", player.id)
-                        table.innerHTML += game.render(player.name)
+                Adaptor.getPlayer(game.player_id)
+                .then(player =>{
+                    table.innerHTML += game.render(player.name)
                     }
-                })
-                // Adaptor.getPlayer(game.player_id)
-                // .then(player =>{
-                //     console.log(player)
-                //     table.innerHTML += game.render(player.name)
-                //     }
-                // )
+                )
         })
 
 }
