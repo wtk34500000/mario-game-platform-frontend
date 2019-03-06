@@ -3,7 +3,7 @@ class Game {
         const{player_id, score}=game
         this.player_id=player_id;
         this.score=score;
-        // Game.all.push(this)
+        Game.all.push(this);
     }
 
     render(name){
@@ -12,3 +12,5 @@ class Game {
         `   
     }
 }
+
+Game.all=[];

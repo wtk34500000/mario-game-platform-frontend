@@ -25,7 +25,12 @@ var score = 0;
 var gameOver = false;
 var scoreText;
 
-var game = new Phaser.Game(config);
+
+
+
+var game = new Phaser.Game(config)
+
+
 
 function preload ()
 {
@@ -123,7 +128,15 @@ function update ()
 {
     if (gameOver)
     {
-        return;
+        const button=document.querySelector('.button')
+        button.addEventListener('click',(e)=>{
+            if(e.target.className ==="button"){
+                // gameOver=false;
+                // this.scene.restart();
+              
+                location.reload()
+            }
+        })
     }
 
     if (cursors.left.isDown)
@@ -183,33 +196,51 @@ function collectStar (player, star)
     }
 }
 
+
 function hitBomb (player, bomb)
 {
     this.physics.pause();
     const name=prompt('Name: ')
     Adaptor.postPlayer(name).then(player => {
-            console.log("first")
-        Adaptor.postGame(player, score).then(console.log("second"))
-        Adaptor.getAllGames().then(games =>{
-            const table = document.querySelector('.score-board')
-            games.forEach(game => {
-                const game1 =new Game(game)
-                fetch(`http://localhost:3000/players/${game.player_id}`)
-                .then(res=> res.json()).then(player =>{
-                    table.innerHTML += game1.render(player.name)
+         new Player(player.name);
+        Adaptor.postGame(player, score).then(game => {
+            Adaptor.getAllGames().then(games =>{
+                games.forEach((game)=>{
+                   new Game(game)
                 })
+                const sortedArray=Game.all.sort((a, b) => b.score - a.score).slice(0, 10)
+
+                scoreBoard(sortedArray)
             })
-            
         })
     
     })
            
-    
-
     player.setTint(0xff0000);
 
     player.anims.play('turn');
 
     gameOver = true;
+}
+
+
+function scoreBoard(games){
+        const table = document.querySelector('.score-board')
+        games.forEach(game => {
+                console.log(Player.all)
+                Player.all.forEach(player =>{
+                    if(player.id === game.player_id){
+                        console.log("i am here", player.id)
+                        table.innerHTML += game.render(player.name)
+                    }
+                })
+                // Adaptor.getPlayer(game.player_id)
+                // .then(player =>{
+                //     console.log(player)
+                //     table.innerHTML += game.render(player.name)
+                //     }
+                // )
+        })
+
 }
 

@@ -26,4 +26,9 @@ class Adaptor {
         .then(resp => resp.json())
      }
 
+     static getPlayer(playerId){
+       return fetch(`http://localhost:3000/players/${playerId}`)
+        .then(res=> res.json())
+     }
+
 }
