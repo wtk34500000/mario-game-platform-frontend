@@ -31,6 +31,8 @@ var theme;
 var game = new Phaser.Game(config);
 let currStar = "star1"
 let arrow;
+let initScore = 10
+let count = 0
 
 
 function preload ()
@@ -71,25 +73,26 @@ function create ()
     player.body.collideWorldBounds = true;
     bombs = this.physics.add.group();
     //  Our player animations, turning, walking left and walking right.
-    this.anims.create({
-        key: 'left',
-        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 2 }),
-        frameRate: 10,
-        repeat: -1
-    });
-    this.anims.create({
-        key: 'turn',
-        frames: [ { key: 'dude', frame: 5 } ],
-        frameRate: 20
-    });
-    this.anims.create({
-        key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', { start: 6, end: 8 }),
-        frameRate: 10,
-        repeat: -1
-    });
+    if(!gameOver){
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'turn',
+            frames: [ { key: 'dude', frame: 5 } ],
+            frameRate: 20
+        });
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('dude', { start: 6, end: 8 }),
+            frameRate: 10,
+            repeat: -1
+        });
 
-
+    }
 
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
@@ -153,8 +156,18 @@ function update ()
 {
     if (gameOver)
     {
-        gameOver=false;
-        this.scene.restart()
+        const button=document.querySelector('.button')
+            button.addEventListener('click',(e)=>{
+                    if(e.target.className === "button"){
+                        game.sound.stopAll();
+                        
+                        score=0;
+                        initScore=10;
+                        count=0;
+                        gameOver=false;
+                        this.scene.restart();
+                    }
+                })
     }
 
     if (cursors.left.isDown)
@@ -186,8 +199,7 @@ function update ()
     //  }
 }
 
-let initScore = 10
-let count = 0
+
 function collectStar (player, star0)
 {
     rupee.play();
@@ -247,17 +259,17 @@ function hitBomb (player, bomb)
 {
 
     this.physics.pause();
+    game.sound.stopAll();
     player.setTint(0xff0000);
     player.anims.play('turn');
     gameOver = true;
-    game.sound.stopAll();
+    
 
-    const name=prompt('Name: ')
+    const name=prompt('Please Enter Your Name:')
     Adaptor.postPlayer(name).then(player => {
         //  new Player(player.name);
         Adaptor.postGame(player, score).then(game => {
             Adaptor.getAllGames().then(games =>{
-        
                 scoreBoard(games)
             })
         })
@@ -265,24 +277,39 @@ function hitBomb (player, bomb)
 
 }
 
+
+
 function scoreBoard(games){
-    Game.all=[]
-    games.forEach((game)=>{
-        new Game(game)
-    })
-    const sortedArray=Game.all.sort((a, b) => b.score - a.score).slice(0, 10)
-    const table = document.querySelector('.score-board')
+    Game.all=[];
+    const resortedArray=[]
+    const table = document.querySelector('.score-board');
+    for(let i=0; i<games.length; i++){
+        new Game(games[i]);
+    }
+    const sortedArray=Game.all.sort((a, b) => b.score - a.score).slice(0, 10);
+    // const sortedArray2=Game.all.sort((a, b) => a.score - b.score).slice(0, 10);
+
     while(table.hasChildNodes()){
         table.removeChild(table.firstChild);
     }
     sortedArray.forEach(game => {
             Adaptor.getPlayer(game.player_id)
             .then(player =>{
-                table.innerHTML += game.render(player.name)
+                const gameObj={
+                    'name': player.name,
+                    'score': game.score
+                }
+                    resortedArray.push(gameObj)
+                    resortedArray.sort((a, b) => b.score - a.score)
+                    let arrayToDisplay = resortedArray.slice(-10)
+                    resortedArray.forEach(game2 =>  {
+                        if(resortedArray.length === sortedArray.length){
+                            table.innerHTML += game.render(game2.name, game2.score)
+                        }
+                    })
                 }
             )
-    })
-
+        })        
 }
 
 

@@ -6,9 +6,9 @@ class Game {
         Game.all.push(this);
     }
 
-    render(name){
+    render(name, score){
         return `
-             <tr><td>${name}</td><td>${this.score}</td></tr>
+             <tr><td>${name}</td><td>${score}</td></tr>
         `   
     }
 }
