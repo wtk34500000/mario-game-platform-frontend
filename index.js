@@ -31,8 +31,8 @@ var theme;
 var game = new Phaser.Game(config);
 let currStar = "star1"
 let arrow;
-// let initScore = 10
-// let count = 0
+let initScore = 10
+let count = 0
 
 
 function preload ()
@@ -229,13 +229,13 @@ function update ()
 {
     if (gameOver)
     {
-                    game.sound.stopAll();
-                    gameOver=false;
-                    score=0;
-                    initScore=10;
-                    count=0;
-                    platformAlgo=1
-                    this.scene.restart();
+        // score=0;
+        // initScore=10;
+        // count=0;
+        game.sound.stopAll();
+        gameOver=false;
+        platformAlgo=1
+        this.scene.restart();
         const button=document.querySelector('.button')
         button.addEventListener('click',(e)=>{
                 if(e.target.className === "button"){
@@ -270,8 +270,8 @@ function update ()
 
 }
 
-let initScore = 10
-let count = 0
+// let initScore = 10
+// let count = 0
 function collectStar (player, star0)
 {
     rupee.play();
@@ -349,12 +349,13 @@ function hitBomb (player, bomb)
     platformAlgo = 1
     currXValue = 130  //x value (how far right from the canvas)
     currYValue = 720
-
+    console.log(score)
     const name=prompt('Please Enter Your Name:')
     Adaptor.postPlayer(name).then(player => {
         //  new Player(player.name);
         Adaptor.postGame(player, score).then(game => {
             Adaptor.getAllGames().then(games =>{
+                console.log(games)
                 scoreBoard(games)
             })
         })
