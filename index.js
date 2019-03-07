@@ -247,15 +247,44 @@ function hitBomb (player, bomb)
 {
 
     this.physics.pause();
-    console.log(score)
-    const name=prompt('Name: ')
-    console.log(name)
     player.setTint(0xff0000);
     player.anims.play('turn');
     gameOver = true;
     game.sound.stopAll();
 
+    const name=prompt('Name: ')
+    Adaptor.postPlayer(name).then(player => {
+        //  new Player(player.name);
+        Adaptor.postGame(player, score).then(game => {
+            Adaptor.getAllGames().then(games =>{
+        
+                scoreBoard(games)
+            })
+        })
+    })
+
 }
+
+function scoreBoard(games){
+    Game.all=[]
+    games.forEach((game)=>{
+        new Game(game)
+    })
+    const sortedArray=Game.all.sort((a, b) => b.score - a.score).slice(0, 10)
+    const table = document.querySelector('.score-board')
+    while(table.hasChildNodes()){
+        table.removeChild(table.firstChild);
+    }
+    sortedArray.forEach(game => {
+            Adaptor.getPlayer(game.player_id)
+            .then(player =>{
+                table.innerHTML += game.render(player.name)
+                }
+            )
+    })
+
+}
+
 
 function render() {
     // weapon.debug();
