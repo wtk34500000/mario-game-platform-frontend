@@ -21,7 +21,7 @@ var stars;
 var bombs;
 var platforms;
 var cursors;
-var score = 0;
+var score=0;
 var gameOver = false;
 var scoreText;
 var rupee = new Audio();
@@ -31,8 +31,8 @@ var theme;
 var game = new Phaser.Game(config);
 let currStar = "star1"
 let arrow;
-let initScore = 10
-let count = 0
+// let initScore = 10
+// let count = 0
 
 
 function preload ()
@@ -57,6 +57,7 @@ function preload ()
 
 function create ()
 {
+    
     //  A simple background for our game
     // theme = this.add.audio("theme");
     // theme.play();
@@ -229,9 +230,9 @@ function update ()
 {
     if (gameOver)
     {
-        // score=0;
         // initScore=10;
         // count=0;
+        // score=0;
         game.sound.stopAll();
         gameOver=false;
         platformAlgo=1
@@ -239,6 +240,7 @@ function update ()
         const button=document.querySelector('.button')
         button.addEventListener('click',(e)=>{
                 if(e.target.className === "button"){
+                   
                     location.reload()
                 }
             })
@@ -270,8 +272,8 @@ function update ()
 
 }
 
-// let initScore = 10
-// let count = 0
+let initScore = 10
+let count = 0
 function collectStar (player, star0)
 {
     rupee.play();
@@ -279,6 +281,7 @@ function collectStar (player, star0)
 
     //  Add and update the score
     score += initScore;
+    // console.log("update: ",score)
     scoreText.setText('Score: ' + score);
       //changing the star's image
 
@@ -349,14 +352,18 @@ function hitBomb (player, bomb)
     platformAlgo = 1
     currXValue = 130  //x value (how far right from the canvas)
     currYValue = 720
-    console.log(score)
+    // console.log(score)
     const name=prompt('Please Enter Your Name:')
     Adaptor.postPlayer(name).then(player => {
         //  new Player(player.name);
         Adaptor.postGame(player, score).then(game => {
             Adaptor.getAllGames().then(games =>{
-                console.log(games)
+                // console.log(games)
                 scoreBoard(games)
+                score=0;
+                initScore = 10
+                count = 0
+
             })
         })
     })
