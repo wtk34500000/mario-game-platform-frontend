@@ -26,6 +26,8 @@ var gameOver = false;
 var scoreText;
 var rupee = new Audio();
 rupee.src = "http://noproblo.dayjo.org/ZeldaSounds/LOZ/LOZ_Get_Rupee.wav"
+var death = new Audio();
+death.src = "sounds/death.mp3";
 var theme;
 // theme.src = "sounds/theme.mp3"
 var game = new Phaser.Game(config);
@@ -37,7 +39,8 @@ let arrow;
 
 function preload ()
 {
-    this.load.audio("theme", "sounds/theme.mp3")
+    this.load.audio("theme", "sounds/theme.mp3");
+    this.load.audio("death", "sounds/death.mp3");
     this.load.image('background', 'assets/sceneImages2/background.png');
     this.load.image('ground', 'assets/sceneImages2/platform.png');
     this.load.image('ground1', 'assets/sceneImages2/platform1.png');
@@ -336,15 +339,16 @@ function hitBomb (player, bomb)
 {
 
     this.physics.pause();
+    death.play()
     game.sound.stopAll();
     player.setTint(0xff0000);
     player.anims.play('turn');
-    gameOver = true;
     platformAlgo = 1
     currXValue = 130  //x value (how far right from the canvas)
     currYValue = 720
     // console.log(score)
-    createPlayerAndUpdateGame()
+    setTimeout(promptName, 3000)
+    // createPlayerAndUpdateGame()
     // const name=prompt('Please Enter Your Name:')
     // Adaptor.postPlayer(name).then(player => {
     //     //  new Player(player.name);
@@ -359,6 +363,8 @@ function hitBomb (player, bomb)
     //     })
     // })
 }
+
+
 
 function scoreBoard(games){
     Game.all=[];
@@ -400,20 +406,37 @@ function scoreBoard(games){
 }
 
 //update to backend and update scoreBoard 
-function createPlayerAndUpdateGame(){
+// function createPlayerAndUpdateGame(){
+//   const name=prompt('Please Enter Your Name:')
+//     Adaptor.postPlayer(name).then(player => {
+//         //  new Player(player.name);
+//         Adaptor.postGame(player, score).then(game => {
+//             Adaptor.getAllGames().then(games =>{
+//                 // console.log(games)
+//                 scoreBoard(games)
+//                 score=0;
+//                 initScore = 10
+//                 count = 0
+//             })
+//         })
+//     })
+// }
+
+function promptName(){
+  gameOver = true;
   const name=prompt('Please Enter Your Name:')
-    Adaptor.postPlayer(name).then(player => {
-        //  new Player(player.name);
-        Adaptor.postGame(player, score).then(game => {
-            Adaptor.getAllGames().then(games =>{
-                // console.log(games)
-                scoreBoard(games)
-                score=0;
-                initScore = 10
-                count = 0
-            })
-        })
+  Adaptor.postPlayer(name).then(player => {
+    //  new Player(player.name);
+    Adaptor.postGame(player, score).then(game => {
+      Adaptor.getAllGames().then(games =>{
+        // console.log(games)
+        scoreBoard(games)
+        score=0;
+        initScore = 10
+        count = 0
+      })
     })
+  })
 }
 
 //create game instance and store to Game.all
