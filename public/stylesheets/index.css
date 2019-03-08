@@ -1,28 +1,63 @@
+body {
+    background-color: black;
+    background-image: url("https://pbs.twimg.com/media/CIg2G5VWUAArllX.png");  
+  }
+  
+  .menu {
+      text-align: center;
+      position: absolute;
+      margin-left: 67%;
+  }
 
-.menu {
-    text-align: center;
-    position: absolute;
-    margin-left: 70%;
-    
-}
+  .thead {
+    color: rgb(55, 176, 242);
+  } 
 
-table{
-    width: 400px;
-    border: 1px solid black;
-}
+  tr {
+      border: 2px solid lightgray;
+  }
 
-tr {
-    border: 1px solid black;
-}
+  td {
+      border: 2px solid lightgray;
+      color: white;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      font-family: VT323;
+      font-size: 35;
+  }
 
-td{
-    border: 1px solid black;
-}
+  button {
+      margin-top: 20px;
+      width: 100%;
+      height: 43px;
+      color: white;
+      font-family: VT323;
+      font-size: 40px;
+      background-color: coral;
+      border-radius: 4px;
+  }
 
-button {
-    margin-top: 20px;
-    width: 400px;
-    height: 30px;
-    color: white;
-    background-color: blue;
-}
+  button:hover {
+    transform: translate(-3px, -3px);
+  }
+
+  h1 {
+    color: coral;
+    font-family: VT323;
+    font-size: 53px;
+    margin-top: -10px;
+  }
+
+  table {
+    border: 2px solid lightgray;
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+    border-radius: 4px;
+    background-color: black;
+  }
+
+  canvas {
+    margin: -8px;
+  }

@@ -226,21 +226,18 @@ function platformCreation() {
 
 
 
+
 function update ()
 {
     if (gameOver)
     {
-        // initScore=10;
-        // count=0;
-        // score=0;
         game.sound.stopAll();
         gameOver=false;
         platformAlgo=1
         this.scene.restart();
-        const button=document.querySelector('.button')
+        const button=document.querySelector('.gif')
         button.addEventListener('click',(e)=>{
-                if(e.target.className === "button"){
-                   
+                if(e.target.className === "gif"){
                     location.reload()
                 }
             })
@@ -353,20 +350,20 @@ function hitBomb (player, bomb)
     currXValue = 130  //x value (how far right from the canvas)
     currYValue = 720
     // console.log(score)
-    const name=prompt('Please Enter Your Name:')
-    Adaptor.postPlayer(name).then(player => {
-        //  new Player(player.name);
-        Adaptor.postGame(player, score).then(game => {
-            Adaptor.getAllGames().then(games =>{
-                // console.log(games)
-                scoreBoard(games)
-                score=0;
-                initScore = 10
-                count = 0
-
-            })
-        })
-    })
+    createPlayerAndUpdateGame()
+    // const name=prompt('Please Enter Your Name:')
+    // Adaptor.postPlayer(name).then(player => {
+    //     //  new Player(player.name);
+    //     Adaptor.postGame(player, score).then(game => {
+    //         Adaptor.getAllGames().then(games =>{
+    //             // console.log(games)
+    //             scoreBoard(games)
+    //             score=0;
+    //             initScore = 10
+    //             count = 0
+    //         })
+    //     })
+    // })
 
 }
 
@@ -376,51 +373,96 @@ function scoreBoard(games){
     Game.all=[];
     const resortedArray=[]
     const table = document.querySelector('.score-board');
-    for(let i=0; i<games.length; i++){
-        new Game(games[i]);
-    }
+    // for(let i=0; i<games.length; i++){
+    //     new Game(games[i]);
+    // }
+
+    createGameInstance(games)
+    
     const sortedArray=Game.all.sort((a, b) => b.score - a.score).slice(0, 10);
     // console.log("sorted array", sortedArray)
     // const sortedArray2=Game.all.sort((a, b) => a.score - b.score).slice(0, 10);
-
-    while(table.hasChildNodes()){
-        table.removeChild(table.firstChild);
-    }
-    sortedArray.forEach(game => {
-            Adaptor.getPlayer(game.player_id)
-            .then(player =>{
-                const gameObj={
-                    'name': player.name,
-                    'score': game.score
-                }
-                    resortedArray.push(gameObj)
-                    resortedArray.sort((a, b) => b.score - a.score)
-                    let arrayToDisplay = resortedArray.slice(-10)
-                    // console.log(arrayToDisplay)
-                    resortedArray.forEach(game2 =>  {
-                        if(resortedArray.length === sortedArray.length){
-                            table.innerHTML += game.render(game2.name, game2.score)
-                        }
-                    })
-                }
-            )
-        })        
+    removePreviousTableScore(table)
+    // while(table.hasChildNodes()){
+    //     table.removeChild(table.firstChild);
+    // }
+    renderTableScore(sortedArray, resortedArray, table)
+    // sortedArray.forEach(game => {
+    //         Adaptor.getPlayer(game.player_id)
+    //         .then(player =>{
+    //             const gameObj={
+    //                 'name': player.name,
+    //                 'score': game.score
+    //             }
+    //                 resortedArray.push(gameObj)
+    //                 resortedArray.sort((a, b) => b.score - a.score)
+    //                 let arrayToDisplay = resortedArray.slice(-10)
+    //                 // console.log(arrayToDisplay)
+    //                 resortedArray.forEach(game2 =>  {
+    //                     if(resortedArray.length === sortedArray.length){
+    //                         table.innerHTML += game.render(game2.name, game2.score)
+    //                     }
+    //                 })
+    //             }
+    //         )
+    //     })        
 }
 
-
-function render() {
-    // weapon.debug();
+//update to backend and update scoreBoard 
+function createPlayerAndUpdateGame(){
+  const name=prompt('Please Enter Your Name:')
+    Adaptor.postPlayer(name).then(player => {
+        //  new Player(player.name);
+        Adaptor.postGame(player, score).then(game => {
+            Adaptor.getAllGames().then(games =>{
+                // console.log(games)
+                scoreBoard(games)
+                score=0;
+                initScore = 10
+                count = 0
+            })
+        })
+    })
 }
 
+function createGameInstance(games){
+  for(let i=0; i<games.length; i++){
+    new Game(games[i]);
+  }
+}
 
-//Bubbles
-//==================//===================//====================
-//==================//===================//====================
-//==================//===================//====================
-//==================//===================//====================
-//==================//===================//====================
-//==================//===================//====================
-//==================//===================//====================
-//==================//===================//====================
-//==================//===================//====================
-//==================//===================//====================
+function removePreviousTableScore(table){
+
+  while(table.hasChildNodes()){
+    table.removeChild(table.firstChild);
+  }
+}
+
+function renderTableScore(sortedArray, resortedArray, table){
+  sortedArray.forEach(game => {
+    Adaptor.getPlayer(game.player_id)
+    .then(player =>{
+        const gameObj={
+            'name': player.name,
+            'score': game.score
+        }
+            resortedArray.push(gameObj)
+            resortedArray.sort((a, b) => b.score - a.score)
+            let arrayToDisplay = resortedArray.slice(-10)
+            // console.log(arrayToDisplay)
+            resortedArray.forEach(game2 =>  {
+                if(resortedArray.length === sortedArray.length){
+                    table.innerHTML += game.render(game2.name, game2.score)
+                }
+            })
+        }
+    )
+  })        
+}
+
+// function restartGame(){
+//   game.sound.stopAll();
+//   gameOver=false;
+//   platformAlgo=1
+//   this.scene.restart();
+// }
