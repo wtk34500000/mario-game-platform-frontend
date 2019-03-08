@@ -380,7 +380,7 @@ function scoreBoard(games){
         new Game(games[i]);
     }
     const sortedArray=Game.all.sort((a, b) => b.score - a.score).slice(0, 10);
-    console.log("sorted array", sortedArray)
+    // console.log("sorted array", sortedArray)
     // const sortedArray2=Game.all.sort((a, b) => a.score - b.score).slice(0, 10);
 
     while(table.hasChildNodes()){
