@@ -128,12 +128,9 @@ function create ()
     this.physics.add.collider(player, bombs, hitBomb, null, this);
 }
 
-
 let currXValue = 130  //x value (how far right from the canvas)
 let currYValue = 720 //y value (how far down from the canvas)
 let platformAlgo = 1
-
-
 
 function platformCreation() {
   // let randPlatformX=Math.floor(Math.random()*800)-30 //*1000 = 100px
@@ -225,8 +222,6 @@ function platformCreation() {
 }
 
 
-
-
 function update ()
 {
     if (gameOver)
@@ -297,8 +292,8 @@ function collectStar (player, star0)
           }
           // debugger;
           child.setBounceY(Phaser.Math.FloatBetween(0.6, 0.4));
-            child.enableBody(true, Math.floor(Math.random()*500)+100, 0, true, true);
-            initScore+=1;
+          child.enableBody(true, Math.floor(Math.random()*500)+100, 0, true, true);
+          initScore+=1;
         });
 
         var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
@@ -337,7 +332,6 @@ function collectStar (player, star0)
     }
 }
 
-
 function hitBomb (player, bomb)
 {
 
@@ -364,10 +358,7 @@ function hitBomb (player, bomb)
     //         })
     //     })
     // })
-
 }
-
-
 
 function scoreBoard(games){
     Game.all=[];
@@ -425,19 +416,21 @@ function createPlayerAndUpdateGame(){
     })
 }
 
+//create game instance and store to Game.all
 function createGameInstance(games){
   for(let i=0; i<games.length; i++){
     new Game(games[i]);
   }
 }
 
+//remove previous table score
 function removePreviousTableScore(table){
-
   while(table.hasChildNodes()){
     table.removeChild(table.firstChild);
   }
 }
 
+//render top ten scores to score board
 function renderTableScore(sortedArray, resortedArray, table){
   sortedArray.forEach(game => {
     Adaptor.getPlayer(game.player_id)
