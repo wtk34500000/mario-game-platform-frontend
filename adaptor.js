@@ -1,6 +1,6 @@
 class Adaptor {
     static postPlayer(name){
-       return fetch('http://localhost:3000/players',{
+       return fetch('http://mario-dodge-game-back-end.herokuapp.com/players',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -12,7 +12,7 @@ class Adaptor {
     }
 
     static postGame(player, score){
-        return fetch('http://localhost:3000/games',{
+        return fetch('http://mario-dodge-game-back-end.herokuapp.com/games',{
              method: 'POST',
              headers: {
                  'content-type': 'application/json'
@@ -22,12 +22,12 @@ class Adaptor {
      }
 
      static getAllGames(){
-        return fetch('http://localhost:3000/games')
+        return fetch('http://mario-dodge-game-back-end.herokuapp.com/games')
         .then(resp => resp.json())
      }
 
      static getPlayer(playerId){
-       return fetch(`http://localhost:3000/players/${playerId}`)
+       return fetch(`http://mario-dodge-game-back-end.herokuapp.com/players/${playerId}`)
         .then(res=> res.json())
      }
 
